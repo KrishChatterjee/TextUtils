@@ -30,13 +30,19 @@ export default function TextForm(props) {
         let newText='';
         setText(newText);
         props.showAlert('Text is cleared','success');
-
         }
 
       const  extraSpClick=()=>{
         let newText = text.split(/[ ]+/);
         setText(newText.join(" "));
         props.showAlert('Extra spaces has been removed','success');
+
+          }
+          
+      const  handelCopy=()=>{
+        document.getSelection().removeAllRanges()
+        navigator.clipboard.writeText(text)
+        props.showAlert('Text has been copied','success');
 
           }
 
@@ -51,23 +57,24 @@ export default function TextForm(props) {
    <div className="mb-3">
   <textarea className={`form-control bg-${props.mode==="dark"?"secondary":"light"} text-${props.mode==="dark"?"light":"dark"}`} id="myBox" rows="8" value={text} onChange={handleOnChange}></textarea>
   </div>
-  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelUpClick} >Convert to UpperCase </button>
-  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelLoClick} >Convert to LowerCase </button>
-  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelTiClick} >Convert to TitleCase </button>
-  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={extraSpClick} >Clear Extra Spaces</button>
-  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={clearClick} >Clear </button>
+  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelUpClick} disabled={text.length===0} >Convert to UpperCase </button>
+  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelLoClick} disabled={text.length===0}>Convert to LowerCase </button>
+  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelTiClick} disabled={text.length===0}>Convert to TitleCase </button>
+  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={extraSpClick} disabled={text.length===0}>Clear Extra Spaces</button>
+  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={clearClick} disabled={text.length===0}>Clear </button>
+  <button type="button" className={`btn btn-${props.mode==="light"?"primary":props.color.btnc} mx-1 my-1`} onClick={handelCopy} disabled={text.length===0}>Copy text </button>
 
 
   </div>
 
   <div className={`container my-2 text-${props.mode==="dark"?"light":"dark"} `}>
     <h1>Your text summary</h1>
-    <p>{text.split(" ").filter(word => word !== '').length} word and {text.length} charactes</p>
-    <p>{text.split(" ").length * 0.005} minutes to read</p>
+    <p>{text.split(/\s+/).filter(word => word !== '').length} word and {text.length} charactes</p>
+    <p>{text.length>0?text.split(" ").length * 0.005:0} minutes to read</p>
   </div>
   <div className={`container my-2 text-${props.mode==="dark"?"light":"dark"} `}>
       <h1>Preview</h1>
-      <pre>{text.length>0?text:"Enter Your text to preview"}</pre>
+      <pre>{text.length>0?text:"No text to preview"}</pre>
     </div>
   </>
   )

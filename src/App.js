@@ -1,5 +1,9 @@
 import Navbar from './components/Navbar';
-import TextForm from './components/TextForm';
+import TextForm from './routes/TextForm';
+import About from './routes/About';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+
 import './App.css';
 import { useState } from 'react';
 import Alert from './components/Alert';
@@ -10,7 +14,7 @@ function App() {
   const [color, setColor] = useState({bgc:"#4a4d5d",btnc:"dark"})
   
   const [alert, setAlert] = useState(null);
-
+  
   const showAlert=(message,type)=>{
     setAlert({
       msg:message,
@@ -19,9 +23,9 @@ function App() {
     setTimeout(() => {
       setAlert(null)
     }, 1200);
-
+    
   }
-
+  
   const changeColor=(bgc,btnc)=>{
     setColor({
       bgc:bgc,
@@ -32,16 +36,14 @@ function App() {
     }
     else{
       showAlert('Theme changed','success')
-      document.body.style.backgroundColor=color.bgc
-
-
+      document.body.style.backgroundColor=color.bgc 
     }
-
+    
   }
-
-
-
-
+  
+  
+  
+  
   const changeMode=()=>{
     if(mode==="light"){
       setMode("dark")
@@ -54,16 +56,24 @@ function App() {
       showAlert('Light Mode has been enabled','success')
     }
   }
-
-
+  
+  
   return (
-    <>
+    <BrowserRouter>
     <Navbar title="TextUtils" aboutText="About Us" changeColor={changeColor} changeMode={changeMode} mode={mode} />
     <Alert alert={alert} />
     <div className="container my-2" >
-    <TextForm heading="Enter the text to analyze below" mode={mode} showAlert={showAlert} color={color}/>
+      <Routes>
+        <Route path="/" element={<TextForm heading="Enter the text to analyze below" mode={mode} showAlert={showAlert} color={color}/>}/>
+         <Route path="about" element={<About mode={mode} />}/>
+          <Route path="*" element={<h1>This Page does not exist</h1>}/>
+         <Route/>
+
+
+      </Routes>
+
     </div>
-    </>
+  </BrowserRouter>
   );
 }
 
